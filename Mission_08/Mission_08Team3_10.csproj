@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\NewFolder\" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
