@@ -1,4 +1,4 @@
-@model YourNamespace.Models.TaskItem   @* change this type *@
+@model Default
 @{
     ViewData["Title"] = "Edit Task";
 }
@@ -8,7 +8,7 @@
         <h1 class="mb-3">Edit Task</h1>
 
         <form method="post">
-            <input type="hidden" asp-for="TaskId" /> @* adjust ID field *@
+            <!-- <input type="hidden" asp-for="TaskId" /> @* adjust ID field *@-->
 
             <div asp-validation-summary="All" class="text-danger"></div>
 
