@@ -1,0 +1,45 @@
+@model dynamic
+
+<div class="row g-3">
+    <div class="col-12">
+        <label class="form-label">Task *</label>
+        <input class="form-control" asp-for="Task" />
+        <span class="text-danger" asp-validation-for="Task"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Due Date</label>
+        <input class="form-control" asp-for="DueDate" type="date" />
+        <span class="text-danger" asp-validation-for="DueDate"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Quadrant *</label>
+        <select class="form-select" asp-for="Quadrant">
+            <option value="">-- Select --</option>
+            <option value="1">Quadrant I (Important / Urgent)</option>
+            <option value="2">Quadrant II (Important / Not Urgent)</option>
+            <option value="3">Quadrant III (Not Important / Urgent)</option>
+            <option value="4">Quadrant IV (Not Important / Not Urgent)</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Quadrant"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Category</label>
+
+        <!-- Most common pattern: controller sets ViewBag.Categories = new SelectList(categories, "CategoryId", "Name"); -->
+        <select class="form-select" asp-for="CategoryId" asp-items="ViewBag.Categories">
+            <option value="">-- Select --</option>
+        </select>
+
+        <span class="text-danger" asp-validation-for="CategoryId"></span>
+    </div>
+
+    <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check">
+            <input class="form-check-input" asp-for="Completed" />
+            <label class="form-check-label" asp-for="Completed">Completed</label>
+        </div>
+    </div>
+</div>

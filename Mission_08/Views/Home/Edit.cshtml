@@ -1,0 +1,31 @@
+@model YourNamespace.Models.TaskItem   @* change this type *@
+@{
+    ViewData["Title"] = "Edit Task";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mb-3">Edit Task</h1>
+
+        <form method="post">
+            <input type="hidden" asp-for="TaskId" /> @* adjust ID field *@
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <partial name="~/Views/Shared/_TaskForm.cshtml" model="Model" />
+
+            <div class="row mt-4">
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
