@@ -1,45 +1,47 @@
 @model Mission_08Team3_10.Models.Task
 
 <div class="row g-3">
+    <!-- Task Name (Required) -->
     <div class="col-12">
-        <label class="form-label">Task *</label>
-        <input class="form-control" asp-for="TaskName" />
-        <span class="text-danger" asp-validation-for="TaskName"></span>
+        <label asp-for="TaskName" class="form-label">Task</label>
+        <input asp-for="TaskName" class="form-control" />
+        <span asp-validation-for="TaskName" class="text-danger"></span>
     </div>
 
+    <!-- Due Date -->
     <div class="col-md-6">
-        <label class="form-label">Due Date</label>
-        <input class="form-control" asp-for="DueDate" type="date" />
-        <span class="text-danger" asp-validation-for="DueDate"></span>
+        <label asp-for="DueDate" class="form-label">Due Date</label>
+        <input asp-for="DueDate" type="date" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
     </div>
 
+    <!-- Quadrant (Required) -->
     <div class="col-md-6">
-        <label class="form-label">Quadrant *</label>
-        <select class="form-select" asp-for="Quadrant">
-            <option value="">-- Select --</option>
+        <label asp-for="Quadrant" class="form-label">Quadrant</label>
+        <select asp-for="Quadrant" class="form-select">
+            <option value="">-- Select Quadrant --</option>
             <option value="1">Quadrant I (Important / Urgent)</option>
             <option value="2">Quadrant II (Important / Not Urgent)</option>
             <option value="3">Quadrant III (Not Important / Urgent)</option>
             <option value="4">Quadrant IV (Not Important / Not Urgent)</option>
         </select>
-        <span class="text-danger" asp-validation-for="Quadrant"></span>
+        <span asp-validation-for="Quadrant" class="text-danger"></span>
     </div>
 
+    <!-- Category (Dropdown) -->
     <div class="col-md-6">
-        <label class="form-label">Category</label>
-
-        <!-- Most common pattern: controller sets ViewBag.Categories = new SelectList(categories, "CategoryId", "Name"); -->
-        <select class="form-select" asp-for="CategoryId" asp-items="ViewBag.Categories">
-            <option value="">-- Select --</option>
+        <label asp-for="CategoryId" class="form-label">Category</label>
+        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+            <option value="">-- Select Category --</option>
         </select>
-
-        <span class="text-danger" asp-validation-for="CategoryId"></span>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
-    <div class="col-md-6 d-flex align-items-end">
-        <div class="form-check">
-            <input class="form-check-input" asp-for="Completed" />
-            <label class="form-check-label" asp-for="Completed">Completed</label>
+    <!-- Completed -->
+    <div class="col-md-6 d-flex align-items-center">
+        <div class="form-check mt-4">
+            <input asp-for="Completed" class="form-check-input" />
+            <label asp-for="Completed" class="form-check-label">Completed</label>
         </div>
     </div>
 </div>
