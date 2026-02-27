@@ -1,128 +1,105 @@
+@* Import the Models namespace so we can reference Task and other model types *@
+@using Mission_08Team3_10.Models
+@* This view receives a list of Task objects from the controller's Quadrants action *@
 @model IEnumerable<Mission_08Team3_10.Models.Task>
 
+@* Razor code block - sets the page title shown in browser tab and _Layout *@
 @{
     ViewData["Title"] = "Quadrants";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Task Quadrants</h1>
-    <a asp-action="Create" class="btn btn-primary">+ Add Task</a>
-</div>
+@* Main heading for the page - assignment: "Build a View that lists out all the tasks, laid out on the screen in Quadrants" *@
+<h1>Task Quadrants</h1>
 
-<div class="row g-4">
-    <!-- Quadrant I -->
-    <div class="col-md-6">
-        <div class="quadrant-card">
-            <div class="quadrant-header q1">Quadrant I &mdash; Important / Urgent</div>
-            @{var q1 = Model.Where(x => x.Quadrant == 1).ToList();}
-            @if (!q1.Any())
-            {
-                <div class="empty-quadrant">No tasks here</div>
-            }
-            @foreach (var t in q1)
-            {
-                <div class="task-item">
-                    <div class="task-info">
-                        <div class="task-name">@t.TaskName</div>
-                        <div class="task-meta">
-                            @if (t.DueDate.HasValue) { <span>Due: @t.DueDate.Value.ToShortDateString() &nbsp;</span> }
-                            @if (t.Category != null) { <span>@t.Category.CategoryName</span> }
-                        </div>
-                    </div>
-                    <div class="task-actions">
-                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-danger">Delete</a>
-                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Done</a>
-                    </div>
-                </div>
-            }
+@* Bootstrap Grid: container provides max-width and centering; assignment requires "Bootstrap Grid system on all pages" *@
+<div class="container">
+    @* First row holds Quadrant I and Quadrant II side by side *@
+    <div class="row">
+        @* col-md-6 = half width on medium+ screens; Quadrant I goes on the left *@
+        <div class="col-md-6">
+            @* Quadrant I label per Covey: Important / Urgent *@
+            <h3>Quadrant I: Important / Urgent</h3>
+            @* list-group = Bootstrap styled list; we'll loop through tasks in this quadrant *@
+            <ul class="list-group">
+                @* Filter Model to only tasks where Quadrant == 1; foreach renders one list item per task *@
+                @foreach (var t in Model.Where(x => x.Quadrant == 1))
+                {
+                    <li class="list-group-item">
+                        @* Display task name in bold *@
+                        <strong>@t.TaskName</strong>
+                        @* DueDate is nullable - ?. prevents null reference; ToShortDateString() formats as date *@
+                        <div>Due: @t.DueDate?.ToShortDateString()</div>
+                        @* Category is a navigation property - ?. safe if null; CategoryName from Category table *@
+                        <div>Category: @t.Category?.CategoryName</div>
+                        @* asp-action="Edit" = link to Home/Edit/{id}; assignment: "Allow the user to Update" *@
+                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-primary">Edit</a>
+                        @* asp-action="Delete" = link to Home/Delete/{id}; assignment: "Allow the user to... Delete" *@
+                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-danger">Delete</a>
+                        @* asp-action="Complete" = link to mark task done; assignment: "mark as Completed" *@
+                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Complete</a>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
 
-    <!-- Quadrant II -->
-    <div class="col-md-6">
-        <div class="quadrant-card">
-            <div class="quadrant-header q2">Quadrant II &mdash; Important / Not Urgent</div>
-            @{var q2 = Model.Where(x => x.Quadrant == 2).ToList();}
-            @if (!q2.Any())
-            {
-                <div class="empty-quadrant">No tasks here</div>
-            }
-            @foreach (var t in q2)
-            {
-                <div class="task-item">
-                    <div class="task-info">
-                        <div class="task-name">@t.TaskName</div>
-                        <div class="task-meta">
-                            @if (t.DueDate.HasValue) { <span>Due: @t.DueDate.Value.ToShortDateString() &nbsp;</span> }
-                            @if (t.Category != null) { <span>@t.Category.CategoryName</span> }
-                        </div>
-                    </div>
-                    <div class="task-actions">
-                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-danger">Delete</a>
-                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Done</a>
-                    </div>
-                </div>
-            }
+        @* Quadrant II - right side of first row *@
+        <div class="col-md-6">
+            @* Quadrant II: Important / Not Urgent *@
+            <h3>Quadrant II: Important / Not Urgent</h3>
+            <ul class="list-group">
+                @foreach (var t in Model.Where(x => x.Quadrant == 2))
+                {
+                    <li class="list-group-item">
+                        <strong>@t.TaskName</strong>
+                        <div>Due: @t.DueDate?.ToShortDateString()</div>
+                        <div>Category: @t.Category?.CategoryName</div>
+                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Complete</a>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
 
-    <!-- Quadrant III -->
-    <div class="col-md-6">
-        <div class="quadrant-card">
-            <div class="quadrant-header q3">Quadrant III &mdash; Not Important / Urgent</div>
-            @{var q3 = Model.Where(x => x.Quadrant == 3).ToList();}
-            @if (!q3.Any())
-            {
-                <div class="empty-quadrant">No tasks here</div>
-            }
-            @foreach (var t in q3)
-            {
-                <div class="task-item">
-                    <div class="task-info">
-                        <div class="task-name">@t.TaskName</div>
-                        <div class="task-meta">
-                            @if (t.DueDate.HasValue) { <span>Due: @t.DueDate.Value.ToShortDateString() &nbsp;</span> }
-                            @if (t.Category != null) { <span>@t.Category.CategoryName</span> }
-                        </div>
-                    </div>
-                    <div class="task-actions">
-                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-danger">Delete</a>
-                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Done</a>
-                    </div>
-                </div>
-            }
+    @* Second row - mt-4 adds top margin for spacing between rows *@
+    <div class="row mt-4">
+        @* Quadrant III: Not Important / Urgent *@
+        <div class="col-md-6">
+            <h3>Quadrant III: Not Important / Urgent</h3>
+            <ul class="list-group">
+                @foreach (var t in Model.Where(x => x.Quadrant == 3))
+                {
+                    <li class="list-group-item">
+                        <strong>@t.TaskName</strong>
+                        <div>Due: @t.DueDate?.ToShortDateString()</div>
+                        <div>Category: @t.Category?.CategoryName</div>
+                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Complete</a>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
 
-    <!-- Quadrant IV -->
-    <div class="col-md-6">
-        <div class="quadrant-card">
-            <div class="quadrant-header q4">Quadrant IV &mdash; Not Important / Not Urgent</div>
-            @{var q4 = Model.Where(x => x.Quadrant == 4).ToList();}
-            @if (!q4.Any())
-            {
-                <div class="empty-quadrant">No tasks here</div>
-            }
-            @foreach (var t in q4)
-            {
-                <div class="task-item">
-                    <div class="task-info">
-                        <div class="task-name">@t.TaskName</div>
-                        <div class="task-meta">
-                            @if (t.DueDate.HasValue) { <span>Due: @t.DueDate.Value.ToShortDateString() &nbsp;</span> }
-                            @if (t.Category != null) { <span>@t.Category.CategoryName</span> }
-                        </div>
-                    </div>
-                    <div class="task-actions">
-                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-outline-danger">Delete</a>
-                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Done</a>
-                    </div>
-                </div>
-            }
+        @* Quadrant IV: Not Important / Not Urgent *@
+        <div class="col-md-6">
+            <h3>Quadrant IV: Not Important / Not Urgent</h3>
+            <ul class="list-group">
+                @foreach (var t in Model.Where(x => x.Quadrant == 4))
+                {
+                    <li class="list-group-item">
+                        <strong>@t.TaskName</strong>
+                        <div>Due: @t.DueDate?.ToShortDateString()</div>
+                        <div>Category: @t.Category?.CategoryName</div>
+                        <a asp-action="Edit" asp-route-id="@t.TaskId" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@t.TaskId" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-action="Complete" asp-route-id="@t.TaskId" class="btn btn-sm btn-success">Complete</a>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
 </div>
