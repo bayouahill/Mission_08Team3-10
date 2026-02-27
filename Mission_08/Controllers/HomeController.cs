@@ -37,6 +37,7 @@ namespace Mission_08Team3_10.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(TaskModel task)
         {
             if (ModelState.IsValid)
