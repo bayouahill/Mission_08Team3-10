@@ -12,11 +12,10 @@ using TaskModel = Mission_08Team3_10.Models.Task;
 namespace Mission_08Team3_10.Controllers
 {
     /// <summary>
-    /// Controller actions for #3 scope: Quadrants View and Update/Delete/Complete functionality.
+    /// Controller actions for Quadrants View and CRUD functionality.
     /// </summary>
     public class HomeController : Controller
     {
-        // DbContext for database access (Repository Pattern is #1/#4 responsibility)
         private readonly Mission08Context _context;
 
         public HomeController(Mission08Context context)
@@ -24,22 +23,19 @@ namespace Mission_08Team3_10.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Default landing page. (Index is #4's responsibility; keeping minimal for routing.)
-        /// </summary>
+        // ----------------------------
+        // INDEX
+        // ----------------------------
         public IActionResult Index()
         {
             return View();
         }
 
-        /// <summary>
-        /// Displays all incomplete tasks organized into the four Covey quadrants.
-        /// Assignment: "Only display tasks that have not been completed."
-        /// </summary>
+        // ----------------------------
+        // QUADRANTS
+        // ----------------------------
         public IActionResult Quadrants()
         {
-            // .Include(t => t.Category) - eager-load Category so Quadrants view can display CategoryName
-            // .Where(t => t.Completed == false) - assignment says only show NOT completed tasks
             var tasks = _context.Tasks
                 .Include(t => t.Category)
                 .Where(t => t.Completed == false)
@@ -48,26 +44,73 @@ namespace Mission_08Team3_10.Controllers
             return View(tasks);
         }
 
+        // ============================
+        // CREATE
+        // ============================
+
         /// <summary>
-        /// GET: Show the form to edit an existing task. (Update ability - #3 scope)
+        /// GET: Show form to create a new task.
         /// </summary>
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ViewBag.Categories =
+                new SelectList(_context.Categories,
+                               "CategoryId",
+                               "CategoryName");
+
+            return View(new TaskModel());
+        }
+
+        /// <summary>
+        /// POST: Add new task to database.
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(TaskModel task)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Tasks.Add(task);
+                _context.SaveChanges();
+                return RedirectToAction("Quadrants");
+            }
+
+            // Repopulate dropdown if validation fails
+            ViewBag.Categories =
+                new SelectList(_context.Categories,
+                               "CategoryId",
+                               "CategoryName",
+                               task.CategoryId);
+
+            return View(task);
+        }
+
+        // ============================
+        // EDIT
+        // ============================
+
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var task = await _context.Tasks
                 .Include(t => t.Category)
                 .FirstOrDefaultAsync(t => t.TaskId == id);
+
             if (task == null)
                 return NotFound();
 
-            ViewBag.Categories = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            ViewBag.Categories =
+                new SelectList(_context.Categories,
+                               "CategoryId",
+                               "CategoryName",
+                               task.CategoryId);
+
             return View(task);
         }
 
-        /// <summary>
-        /// POST: Process the submitted changes and update the task. (Update ability - #3 scope)
-        /// </summary>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(TaskModel task)
         {
             if (ModelState.IsValid)
@@ -76,32 +119,39 @@ namespace Mission_08Team3_10.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Quadrants");
             }
-            ViewBag.Categories = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+
+            ViewBag.Categories =
+                new SelectList(_context.Categories,
+                               "CategoryId",
+                               "CategoryName",
+                               task.CategoryId);
+
             return View(task);
         }
 
-        /// <summary>
-        /// GET: Show confirmation page before deleting. (Delete ability - #3 scope)
-        /// </summary>
+        // ============================
+        // DELETE
+        // ============================
+
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var task = await _context.Tasks
                 .Include(t => t.Category)
                 .FirstOrDefaultAsync(t => t.TaskId == id);
+
             if (task == null)
                 return NotFound();
 
             return View(task);
         }
 
-        /// <summary>
-        /// POST: Delete the task after user confirms. (Delete ability - #3 scope)
-        /// </summary>
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var task = await _context.Tasks.FindAsync(id);
+
             if (task == null)
                 return NotFound();
 
@@ -110,13 +160,15 @@ namespace Mission_08Team3_10.Controllers
             return RedirectToAction("Quadrants");
         }
 
-        /// <summary>
-        /// GET: Mark a task as completed. (Mark as Completed - #3 scope)
-        /// </summary>
+        // ============================
+        // COMPLETE
+        // ============================
+
         [HttpGet]
         public async Task<IActionResult> Complete(int id)
         {
             var task = await _context.Tasks.FindAsync(id);
+
             if (task == null)
                 return NotFound();
 
