@@ -1,8 +1,47 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-section">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="display-5 mb-3">Stephen Covey's Time Management Matrix</h1>
+            <p class="lead mb-4">Organize your tasks by importance and urgency to focus on what truly matters.</p>
+            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a asp-action="Quadrants" class="btn btn-light btn-lg px-4">View Quadrants</a>
+                <a asp-action="Create" class="btn btn-outline-light btn-lg px-4">Add Task</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="q-info-card q1">
+            <h5>Quadrant I &mdash; Important &amp; Urgent</h5>
+            <p class="mb-1">Do these tasks first.</p>
+            <p class="q-sub">Crises &bull; Pressing problems &bull; Deadlines</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="q-info-card q2">
+            <h5>Quadrant II &mdash; Important &amp; Not Urgent</h5>
+            <p class="mb-1">Schedule time for these.</p>
+            <p class="q-sub">Relationship building &bull; Planning &bull; Recreation</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="q-info-card q3">
+            <h5>Quadrant III &mdash; Not Important &amp; Urgent</h5>
+            <p class="mb-1">Delegate when possible.</p>
+            <p class="q-sub">Interruptions &bull; Some phone calls &bull; Some mail</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="q-info-card q4">
+            <h5>Quadrant IV &mdash; Not Important &amp; Not Urgent</h5>
+            <p class="mb-1">Eliminate or minimize.</p>
+            <p class="q-sub">Busy work &bull; Time wasters &bull; Some mail</p>
+        </div>
+    </div>
 </div>
