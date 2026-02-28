@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Mission_08Team3_10.Models;
+using Mission_08Team3_10.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<Mission08Context>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 var app = builder.Build();
 
