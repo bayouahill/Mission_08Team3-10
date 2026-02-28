@@ -28,7 +28,7 @@ namespace Mission_08Team3_10.Controllers
         // ----------------------------
         public IActionResult Index()
         {
-            return RedirectToAction("Quadrants");
+            return View();
         }
 
         // ----------------------------
